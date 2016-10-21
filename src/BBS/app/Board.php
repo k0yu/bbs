@@ -12,7 +12,11 @@ class Board extends Model
 		'title', 'text'
 	];
 	
-	public function user(){
-		return $this->belongTo('App\User');
+	public function userB(){
+		return $this->belongsTo('App\User');
+	}
+	
+	public function comments(){
+		return $this->hasMany('App\Comment');
 	}
 }

@@ -17,6 +17,7 @@ Route::get('/', function () {
 
 Route::auth();
 Route::resource('board', 'BoardController');
+Route::resource('comment', 'CommentController');
 Route::get('/home', 'HomeController@index');
 Route::get('/newPost', function (){return view('newPost');});
 

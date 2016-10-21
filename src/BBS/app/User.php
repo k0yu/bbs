@@ -27,4 +27,8 @@ class User extends Authenticatable
 	public function boards(){
 		return $this->hasMany('App\Board');
 	}
+	
+	public function comments(){
+		return $this->hasMany('App\Comment');
+	}
 }

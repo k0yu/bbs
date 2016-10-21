@@ -4,15 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Comment;
 use App\Board;
 use App\Http\Requests;
 
-class BoardController extends Controller
+class CommentController extends Controller
 {
-	
-	public function __construct(){
-		$this->middleware('auth');
-	}
     /**
      * Display a listing of the resource.
      *
@@ -21,9 +18,6 @@ class BoardController extends Controller
     public function index()
     {
         //
-		$boards = Board::all();
-		
-		return view('boardList', ['boards' => $boards]);
     }
 
     /**
@@ -31,12 +25,10 @@ class BoardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
-
-	public function create(){
-		return view('newPost');
-		
-	}
+    public function create()
+    {
+        //
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -46,13 +38,14 @@ class BoardController extends Controller
      */
     public function store(Request $request)
     {
-        //
-		$board = $request->user()->boards()->create([
-			'title' => $request->title,
+		$request->user()->comments()->create([
+			'board_id' => $request->board_id,
 			'text' => $request->text
 		]);
 		
-		return redirect()->action('BoardController@show', [$board->id]);
+		
+		return redirect()->action('BoardController@show', [$request->board_id]);
+		
     }
 
     /**
@@ -64,10 +57,6 @@ class BoardController extends Controller
     public function show($id)
     {
         //
-		$board = Board::findOrFail($id);
-		return view('boardDetail', [
-			'board' => $board,
-		]);
     }
 
     /**
@@ -79,9 +68,9 @@ class BoardController extends Controller
     public function edit($id)
     {
         //
-		$board = Board::findOrFail($id);
-		return view('boardEdit', [
-			'board' => $board,
+		$comment = Comment::findOrFail($id);
+		return view('commentEdit', [
+			'comment' => $comment,
 		]);
     }
 
@@ -95,14 +84,13 @@ class BoardController extends Controller
     public function update(Request $request, $id)
     {
         //
-		$board = Board::findOrFail($id);
-		$this->authorize('update', $board);
-		$board->update([
-			'title' => $request->title,
+		$comment = Comment::findOrFail($id);
+		$this->authorize('update', $comment);
+		$comment->update([
 			'text' => $request->text
 		]);
 		
-		return redirect()->action('BoardController@show', [$board->id]);
+		return redirect()->action('BoardController@show', [$comment->board_id]);
     }
 
     /**
@@ -114,10 +102,11 @@ class BoardController extends Controller
     public function destroy($id)
     {
         //
-		$board = Board::findOrFail($id);
-		$this->authorize('destroy', $board);
-		$board->delete();
+		$comment = Comment::findOrFail($id);
+		$board_id = $comment->board_id;
+		$this->authorize('destroy', $comment);
+		$comment->delete();
 		
-		return redirect('/');
+		return redirect()->action('BoardController@show', [$board_id]);
     }
 }
