@@ -21,7 +21,7 @@ class BoardController extends Controller
     public function index()
     {
         //
-		$boards = Board::all();
+		$boards = Board::paginate(3);
 		
 		return view('boardList', ['boards' => $boards]);
     }
@@ -65,7 +65,7 @@ class BoardController extends Controller
     {
         //
 		$board = Board::findOrFail($id);
-		return view('boardDetail', [
+		return view('boardDetailA', [
 			'board' => $board,
 		]);
     }

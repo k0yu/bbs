@@ -57,6 +57,19 @@ class CommentController extends Controller
     public function show($id)
     {
         //
+		$board = Board::findOrFail($id);
+		$json = $board->comments()->paginate(2);
+		//jsonA = json_decode($json); nullになる
+		$array = array(
+			'view' => view('commentDetail')->with('json', $json)->render(),
+			'next_page_url' => $json->nextPageUrl()
+		);
+		
+		return json_encode($array);
+		//return json_encode(view('commentDetail')->with('json', $json)->render());
+		//dd($jsonA);
+
+		
     }
 
     /**

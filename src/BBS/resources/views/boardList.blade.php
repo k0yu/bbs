@@ -11,6 +11,7 @@
 					</a>
 				@endforeach
 			</ul>
+			{{ $boards->links() }}
         </div>
     </div>
 </div>
