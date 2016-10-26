@@ -54,6 +54,20 @@
 					<li><a href="{{ url('/board/create') }}">New Post</a></li>
                 </ul>
 
+				<form class="navbar-form navbar-left" role="search" method="GET" action="{{ url('/search') }}">
+					{{ csrf_field() }}
+					<div class="form-group">
+					<select name="target" class="form-control">
+						<option value="board">board</option>
+						<option value="comment">comment</option>
+						<option value="user">user</option>
+					</select>
+						<input type="text" class="form-control" name="keyword" placeholder="検索キーワード">
+					</div>
+					<button type="submit" class="btn btn-default">
+						<i class='glyphicon glyphicon-search'></i>
+					</button>
+				</form>
                 <!-- Right Side Of Navbar -->
                 <ul class="nav navbar-nav navbar-right">
                     <!-- Authentication Links -->

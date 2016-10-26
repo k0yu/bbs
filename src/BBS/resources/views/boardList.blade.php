@@ -4,6 +4,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
+		@yield('search')
 			<ul class="list-group">
 				@foreach($boards as $board)
 					<a href="{{ url('/board/'.$board->id) }}" class="list-group-item">
@@ -11,7 +12,7 @@
 					</a>
 				@endforeach
 			</ul>
-			{{ $boards->links() }}
+			@yield('links', $boards->links())
         </div>
     </div>
 </div>
