@@ -1,7 +1,8 @@
 
 							@foreach($json as $comment)
 								<li class="list-group-item">
-									<p>{{ App\User::find($comment->user_id)->name }}</p>
+									<a href="{{ url('/home/'.App\User::find($comment->user_id)->id) }}">{{ App\User::find($comment->user_id)->name }}</a>
+									<span>createTime:{{ $comment->created_at }}</span>
 									<p>{!! str_replace('&lt;br /&gt;', '<br>', e( nl2br($comment->text) ,ENT_QUOTES) ) !!}</p>
 									@if(Auth::user()->id == $comment->user_id)
 										<div class="text-right">
@@ -12,12 +13,11 @@
 													<i class="fa fa-btn fa-trash"></i>
 												</button>
 											</form>
-											<form class="form-group " role="form" method="GET" action="{{ url('/comment/'.$comment->id).'/edit' }}">
-												{{ csrf_field() }}
+											<a href="{{ url('/comment/'.$comment->id).'/edit' }}">
 												<button  class="btn btn-info">
 													<i class="fa fa-btn fa-pencil"></i>
 												</button>
-											</form>
+											</a>
 										</div>
 									@endif
 								</li>

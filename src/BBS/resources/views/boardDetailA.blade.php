@@ -7,13 +7,17 @@
 <div class="container">
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
 					{{ $board->title }}
 				</div>
 
                 <div class="panel-body">
-					<p class="text-right">{{ App\User::find($board->user_id)->name }} | {{ $board->created_at }}</p>
+					<div class="text-right">
+						<p>createTime:{{ $board->created_at }}</p>
+						<a href="{{ url('/home/'.App\User::find($board->user_id)->id) }}">{{ App\User::find($board->user_id)->name }}</a>
+						
+					</div>
 					<p>{!! str_replace('&lt;br /&gt;', '<br>', e( nl2br($board->text) ,ENT_QUOTES) ) !!}</p>
 					
 					@if(Auth::user()->id == $board->user_id)
@@ -25,33 +29,37 @@
 									<i class="fa fa-btn fa-trash"></i>Delete
 								</button>
 							</form>
-							<form class="form-group" role="form" method="GET" action="{{ url('/board/'.$board->id).'/edit' }}">
-								{{ csrf_field() }}
+							<a href="{{ url('/board/'.$board->id).'/edit' }}">
 								<button type="submit" class="btn btn-info">
 									<i class="fa fa-btn fa-pencil"></i>Edit
 								</button>
-							</form>
+							</a>
 						</div>
 					@endif
                 </div>
             </div>
 			
 			
-			<div class="panel panel-default">
+			<div class="panel panel-info">
                 <div class="panel-heading">Comment List</div>
-                <div class="panel-body">
+
 
 					@if($board->comments()->exists())
 						<ul class="list-group" id="commentList">
 						</ul>
+					@else
+						<div class="panel-body">
+							コメントはありません
+						</div>
 					@endif
-
+                <div class="panel-footer">
 					<form class="form-group" role="form" method="POST" action="{{ url('/comment') }}">
 						{{ csrf_field() }}
 						<input type="hidden" name="board_id" value="{{ $board->id }}">
-						<div class="form-group">
-							<label for="text">Comment</label>
-							<textarea class="form-control" rows="5" id="text" name="text"></textarea>
+						<div class="form-group @if(!empty($errors->first('text'))) has-error @endif">
+							<label for="text" class="control-label">Comment</label>
+							<textarea class="form-control" rows="5" id="text" name="text">{{ old('text') }}</textarea>
+							<span class="help-block">{{$errors->first('text')}}</span>
 						</div>
 						<div class="form-group">
 							<button type="submit" class="btn btn-primary">Submit</button>

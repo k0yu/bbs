@@ -10,7 +10,10 @@
 				</div>
 
                 <div class="panel-body">
-					<p class="text-right">{{ App\User::find($board->user_id)->name }} | {{ $board->created_at }}</p>
+					<p class="text-right">
+						<a href="{{ url('/home/'.App\User::find($board->user_id)->id) }}">{{ App\User::find($board->user_id)->name }}</a>
+						<span>createTime{{ $board->created_at }}</span>
+					</p>
 					<p>{!! str_replace('&lt;br /&gt;', '<br>', e( nl2br($board->text) ,ENT_QUOTES) ) !!}</p>
 					
 					@if(Auth::user()->id == $board->user_id)

@@ -42,6 +42,9 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
+		$this->validate($request, [
+			'text' => 'required|max:255',
+		]);
 		$request->user()->comments()->create([
 			'board_id' => $request->board_id,
 			'text' => $request->text
@@ -101,6 +104,9 @@ class CommentController extends Controller
     public function update(Request $request, $id)
     {
         //
+		$this->validate($request, [
+			'text' => 'required|max:255',
+		]);
 		$comment = Comment::findOrFail($id);
 		$this->authorize('update', $comment);
 		$comment->update([

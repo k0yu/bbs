@@ -58,11 +58,11 @@
 					{{ csrf_field() }}
 					<div class="form-group">
 					<select name="target" class="form-control">
-						<option value="board">board</option>
-						<option value="comment">comment</option>
-						<option value="user">user</option>
+						@if(old('target') == "board")<option value="board" selected>board</option>@else<option value="board">board</option>@endif
+						@if(old('target') == "comment")<option value="comment" selected>comment</option>@else<option value="comment">comment</option>@endif
+						@if(old('target') == "user")<option value="user" selected>user</option>@else<option value="user">user</option>@endif
 					</select>
-						<input type="text" class="form-control" name="keyword" placeholder="検索キーワード">
+						<input type="text" class="form-control" name="keyword" placeholder="検索キーワード" value="{{ old('keyword') }}">
 					</div>
 					<button type="submit" class="btn btn-default">
 						<i class='glyphicon glyphicon-search'></i>

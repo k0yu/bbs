@@ -1,3 +1,4 @@
+
 @extends('layouts.app')
 
 @section('content')
@@ -14,31 +15,32 @@
 		</div>
         <div class="col-md-10">
             <div class="panel panel-primary ">
-                <div class="panel-heading">掲示板一覧
-				@if($boards->total() != 0)
-					({{ $boards->total() }}件中 {{ $boards->firstItem() }} - {{ $boards->lastItem() }}件表示)</div>
+                <div class="panel-heading">コメント一覧
+				@if($comments->total() != 0)
+					({{ $comments->total() }}件中 {{ $comments->firstItem() }} - {{ $comments->lastItem() }}件表示)</div>
 				
 					<ul class="list-group">
-						@foreach($boards as $board)
-							<a href="{{ url('/board/'.$board->id) }}" class="list-group-item">
-								<p>{{ $board->title }}</p>
-								<p class="boardText">{{ $board->text }}</p>
-							</a>
+						@foreach($comments as $comment)
+						<li class="list-group-item">
+							<a href="{{ url('/board/'.$comment->board_id) }}"><p>{{ App\Board::find($comment->board_id)->title }}</p></a>
+							<p>{{ $comment->text }}</p>
+						</li>
 						@endforeach
 					</ul>
 				@else
 					</div>
 					<div class="panel-body">
-						<p>投稿はありません</p>
+						<p>コメントはありません</p>
 					</div>
 				@endif
 					
 
             </div>
-			@if($boards->total() != 0)
-				<div class="text-center">{{ $boards->links() }}</div>
+			@if($comments->total() != 0)
+				<div class="text-center">{{ $comments->links() }}</div>
 			@endif
         </div>
     </div>
 </div>
 @endsection
+

@@ -4,20 +4,22 @@
 <div class="container">
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
-            <div class="panel panel-default">
+            <div class="panel panel-primary">
                 <div class="panel-heading">Update</div>
 
                 <div class="panel-body">
 					<form class="form-group" role="form" method="POST" action="{{ url('/board/'.$board->id) }}">
 						{{ csrf_field() }}
 						<input name="_method" type="hidden" value="PUT">
-						<div class="form-group">
-							<label for="title">Title</label>
-							<input type="text" class="form-control" id="title" placeholder="Title" name="title" value="{{ $board->title }}">
+						<div class="form-group @if(!empty($errors->first('title'))) has-error @endif">
+							<label for="title"  class="control-label">Title</label>
+							<input type="text" class="form-control" id="title" placeholder="Title" name="title" value="@if(null == old('title')){{ $board->title }}@else{{ old('title') }}@endif">
+							<span class="help-block">{{$errors->first('title')}}</span>
 						</div>
-						<div class="form-group">
-							<label for="text">Text</label>
-							<textarea class="form-control" rows="5" id="text" name="text">{{ $board->text }}</textarea>
+						<div class="form-group @if(!empty($errors->first('text'))) has-error @endif">
+							<label for="text" class="control-label">Text</label>
+							<textarea class="form-control" rows="5" id="text" placeholder="Text" name="text">@if(null == old('text')){{ $board->text }}@else{{ old('text') }}@endif</textarea>
+							<span class="help-block">{{$errors->first('text')}}</span>
 						</div>
 						<div class="form-group">
 							<button type="submit" class="btn btn-primary">Update</button>

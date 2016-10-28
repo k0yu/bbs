@@ -34,6 +34,7 @@ class BoardController extends Controller
     
 
 	public function create(){
+		
 		return view('newPost');
 		
 	}
@@ -47,10 +48,15 @@ class BoardController extends Controller
     public function store(Request $request)
     {
         //
+		$this->validate($request, [
+			'title' => 'required|max:50',
+			'text' => 'required|max:255',
+		]);
 		$board = $request->user()->boards()->create([
 			'title' => $request->title,
 			'text' => $request->text
 		]);
+		
 		
 		return redirect()->action('BoardController@show', [$board->id]);
     }
@@ -79,7 +85,9 @@ class BoardController extends Controller
     public function edit($id)
     {
         //
+		
 		$board = Board::findOrFail($id);
+		
 		return view('boardEdit', [
 			'board' => $board,
 		]);
@@ -95,6 +103,10 @@ class BoardController extends Controller
     public function update(Request $request, $id)
     {
         //
+		$this->validate($request, [
+			'title' => 'required|max:50',
+			'text' => 'required|max:255',
+		]);
 		$board = Board::findOrFail($id);
 		$this->authorize('update', $board);
 		$board->update([

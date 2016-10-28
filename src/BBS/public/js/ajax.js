@@ -38,7 +38,7 @@ function commentGet(){
 				$('link[rel="next"]').attr('href', json.next_page_url);
 				if(!$('#commentAjax').size()){
 					$('#commentList').after(
-						'<button class="btn btn-secondary" type="button" id="commentAjax">コメント取得</button>'
+						'<button class="btn btn-secondary  center-block" type="button" id="commentAjax">コメント取得</button>'
 					);
 					$('#commentAjax').on('click', commentGet);
 				}

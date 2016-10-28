@@ -21,6 +21,7 @@ class SearchController extends Controller
 		$pageNum = 3;
 		$target = $request->target;
 		$keyword = $request->keyword;
+		$request->flash();
 		
 		if($target == "board"){
 			if ($keyword) {
@@ -42,7 +43,8 @@ class SearchController extends Controller
 			}else{
 				$users = User::paginate($pageNum);
 			}
-			return view('searchResult', ['users' => $users]);
+			return view('userList', ['users' => $users]);
 		}
+		
 	}
 }

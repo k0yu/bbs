@@ -11,9 +11,10 @@
 					<form class="form-group" role="form" method="POST" action="{{ url('/comment/'.$comment->id) }}">
 						{{ csrf_field() }}
 						<input name="_method" type="hidden" value="PUT">
-						<div class="form-group">
-							<label for="text">Text</label>
-							<textarea class="form-control" rows="5" id="text" name="text">{{ $comment->text }}</textarea>
+						<div class="form-group @if(!empty($errors->first('text'))) has-error @endif">
+							<label for="text" class="control-label">Text</label>
+							<textarea class="form-control" rows="5" id="text" name="text">@if(null == old('text')){{ $comment->text }}@else{{ old('text') }}@endif</textarea>
+							<span class="help-block">{{$errors->first('text')}}</span>
 						</div>
 						<div class="form-group">
 							<button type="submit" class="btn btn-primary">Update</button>

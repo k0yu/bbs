@@ -18,8 +18,11 @@ Route::get('/', function () {
 Route::auth();
 Route::resource('board', 'BoardController');
 Route::resource('comment', 'CommentController');
+
 Route::get('/home', 'HomeController@myHome');
 Route::get('/home/{id}', 'HomeController@userHome');
-Route::get('/newPost', function (){return view('newPost');});
+Route::get('/home/comment', 'HomeController@myHomeComment');
+Route::get('/home/comment/{id}', 'HomeController@userHomeComment');
+
 Route::get('/search', 'SearchController@search');
 

@@ -26,7 +26,7 @@ class HomeController extends Controller
     public function myHome()
     {
 		$user = \Auth::user();
-		$boards = $user->boards;
+		$boards = $user->boards()->paginate(3);
         return view('home', [
 			"user" => $user,
 			"boards" => $boards
@@ -36,10 +36,30 @@ class HomeController extends Controller
 	public function userHome($id)
     {
 		$user = User::find($id);
-		$boards = $user->boards;
+		$boards = $user->boards()->paginate(3);
         return view('home', [
 			"user" => $user,
 			"boards" => $boards
 		]);
     }
+	
+	public function myHomeComment(){
+		$user = \Auth::user();
+		$comments = $user->comments()->paginate(3);
+        return view('homeComment', [
+			"user" => $user,
+			"comments" => $comments
+		]);
+
+	}
+	
+	public function userHomeComment($id){
+		$user = User::find($id);
+		$comments = $user->comments()->paginate(3);
+        return view('homeComment', [
+			"user" => $user,
+			"comments" => $comments
+		]);
+
+	}
 }
