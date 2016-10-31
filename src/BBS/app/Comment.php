@@ -13,6 +13,8 @@ class Comment extends Model
         'text', 'board_id'
     ];
 	
+	protected $touches = ['board'];
+	
 	public function userC(){
 		return $this->belongsTo('App\User');
 	}

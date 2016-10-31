@@ -18,6 +18,7 @@ Route::get('/', function () {
 Route::auth();
 Route::resource('board', 'BoardController');
 Route::resource('comment', 'CommentController');
+Route::resource('tag', 'TagController');
 
 Route::get('/home', 'HomeController@myHome');
 Route::get('/home/{id}', 'HomeController@userHome');

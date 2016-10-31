@@ -9,6 +9,7 @@ use App\Http\Requests;
 use App\User;
 use App\Board;
 use App\Comment;
+use App\Tag;
 
 class SearchController extends Controller
 {
@@ -25,25 +26,32 @@ class SearchController extends Controller
 		
 		if($target == "board"){
 			if ($keyword) {
-				$boards = Board::where('title', 'LIKE', "%{$keyword}%")->orWhere('text', 'LIKE', "%{$keyword}%")->paginate($pageNum);
+				$boards = Board::where('title', 'LIKE', "%{$keyword}%")->orWhere('text', 'LIKE', "%{$keyword}%")->orderBy('updated_at', 'desc')->paginate($pageNum);
 			}else{
-				$boards = Board::paginate($pageNum);
+				$boards = Board::orderBy('updated_at', 'desc')->paginate($pageNum);
 			}
 			return view('searchResult', ['boards' => $boards]);
 		}elseif($target == "comment"){
 			if ($keyword) {
-				$comments = Comment::where('text', 'LIKE', "%{$keyword}%")->paginate($pageNum);
+				$comments = Comment::where('text', 'LIKE', "%{$keyword}%")->orderBy('updated_at', 'desc')->paginate($pageNum);
 			}else{
-				$comments = Comment::paginate($pageNum);
+				$comments = Comment::orderBy('updated_at', 'desc')->paginate($pageNum);
 			}
 			return view('commentList', ['comments' => $comments]);
 		}elseif($target == "user"){
 			if ($keyword) {
-				$users = User::where('name', 'LIKE', "%{$keyword}%")->paginate($pageNum);
+				$users = User::where('name', 'LIKE', "%{$keyword}%")->orderBy('updated_at', 'desc')->paginate($pageNum);
 			}else{
-				$users = User::paginate($pageNum);
+				$users = User::orderBy('updated_at', 'desc')->paginate($pageNum);
 			}
 			return view('userList', ['users' => $users]);
+		}elseif($target == "tag"){
+			if ($keyword) {
+				$tags = Tag::where('name', 'LIKE', "%{$keyword}%")->orderBy('updated_at', 'desc')->paginate($pageNum);
+			}else{
+				$tags = Tag::orderBy('updated_at', 'desc')->paginate($pageNum);
+			}
+			return view('tagList', ['tags' => $tags]);
 		}
 		
 	}

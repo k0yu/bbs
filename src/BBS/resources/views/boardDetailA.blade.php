@@ -14,12 +14,39 @@
 
                 <div class="panel-body">
 					<div class="text-right">
-						<p>createTime:{{ $board->created_at }}</p>
+						<p>createTime:{{ $board->created_at }}  updateTime:{{ $board->updated_at }}</p>
 						<a href="{{ url('/home/'.App\User::find($board->user_id)->id) }}">{{ App\User::find($board->user_id)->name }}</a>
 						
 					</div>
 					<p>{!! str_replace('&lt;br /&gt;', '<br>', e( nl2br($board->text) ,ENT_QUOTES) ) !!}</p>
+					@if($board->tags()->exists())
+						<div class="tagList">
+						@foreach($board->tags as $tag)
+							<form method="GET" action="{{ url('/tag/'.$tag->id) }}" class="pull-left tag">
+								<button type="submit" class="btn btn-primary btn-xs">
+								{{ $tag->name}} <span class="glyphicon glyphicon-remove-circle hidden tagDeleteBtn" aria-hidden="true"></span> 
+								</button>
+							</form>
+						@endforeach
+						</div>
+					@endif
+					<div class="text-right"><a data-toggle="collapse" href="#list1" id="tagTgl"><span class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a></div>
+                </div>
+				
+				<div id="list1" class="panel-collapse collapse">
+				<div class="panel-body">
+					<form class="form-group" role="form" method="POST" action="{{ url('/tag') }}">
+						{{ csrf_field() }}
+						<input type="hidden" name="board_id" value="{{ $board->id }}">
+						<div class="form-group @if(!empty($errors->first('tag'))) has-error @endif">
+							<input type="text" class="form-control" id="tag" placeholder="Tag" name="tag" value="{{ old('tag') }}">
+							<span class="help-block @if(empty($errors->first('tag')))hidden @endif">{{$errors->first('tag')}}</span>
+						</div>
+						<div class="form-group">
+							<button type="submit" class="btn btn-primary">Add</button>
+						</div>
 					
+					</form>
 					@if(Auth::user()->id == $board->user_id)
 						<div class="text-right">
 							<form class="form-group pull-right" role="form" method="POST" action="{{ url('/board/'.$board->id) }}">
@@ -29,6 +56,7 @@
 									<i class="fa fa-btn fa-trash"></i>Delete
 								</button>
 							</form>
+							
 							<a href="{{ url('/board/'.$board->id).'/edit' }}">
 								<button type="submit" class="btn btn-info">
 									<i class="fa fa-btn fa-pencil"></i>Edit
@@ -36,7 +64,8 @@
 							</a>
 						</div>
 					@endif
-                </div>
+				</div>
+				</div>
             </div>
 			
 			

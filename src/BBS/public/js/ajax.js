@@ -10,8 +10,7 @@ function init(){
         }
 	});
 	$('#commentList').ready(commentGet());
-	
-	//$("commentAjax").onclick = commentGet;
+	$('#tagTgl').on('click', tagDeleteBtn);
 	
 }
 
@@ -52,4 +51,25 @@ function commentGet(){
 			console.log(jqXHR + '-' + textStatus + '-' + errorThrown);
 		}
 	});
+}
+
+function tagDeleteBtn(){
+	
+	if($('.tagDeleteBtn').hasClass("hidden")){
+		$('.tagDeleteBtn').removeClass("hidden");
+		$('.tag').attr('method', 'POST');
+		var csrf = $('meta[name="csrf-token"]').attr('content');
+		var board_id = $('input[name="board_id"]').attr('value');
+		$('.tag').append('<input name="_method" type="hidden" value="PUT"><input type="hidden" name="_token" value="'+
+			csrf+
+			'"><input type="hidden" name="board_id" value="'+
+			board_id+
+			'">');
+	}else{
+		$('.tagDeleteBtn').addClass("hidden");
+		$('.tag').attr('method', 'GET');
+		$('.tag input[value="PUT"]').remove();
+		$('.tag input[name="_token"]').remove();
+		$('.tag input[name="board_id"]').remove();
+	}
 }

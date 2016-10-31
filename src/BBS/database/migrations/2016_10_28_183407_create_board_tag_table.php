@@ -16,10 +16,9 @@ class CreateBoardTagTable extends Migration
 		Schema::create('board_tag', function (Blueprint $table) {
 			$table->integer('board_id')->unsigned();
 			$table->integer('tag_id')->unsigned();
-            $table->timestamps();
 			
-			$table->foreign('board_id')->references('id')->on('boards');
-			$table->foreign('tag_id')->references('id')->on('tags');
+			$table->foreign('board_id')->references('id')->on('boards')->onDelete('cascade');
+			$table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
 			
 			$table->unique(['board_id', 'tag_id']);
         });
@@ -33,5 +32,7 @@ class CreateBoardTagTable extends Migration
     public function down()
     {
         //
+		Schema::drop('tags');
+		Schema::drop('board_tag');
     }
 }

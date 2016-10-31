@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-use App\Board;
 use App\Http\Requests;
 
-class BoardController extends Controller
+use App\Tag;
+use App\Board;
+
+class TagController extends Controller
 {
 	
 	public function __construct(){
@@ -21,9 +23,6 @@ class BoardController extends Controller
     public function index()
     {
         //
-		$boards = Board::orderBy('updated_at', 'desc')->paginate(3);
-		
-		return view('boardList', ['boards' => $boards]);
     }
 
     /**
@@ -31,13 +30,10 @@ class BoardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
-
-	public function create(){
-		
-		return view('newPost');
-		
-	}
+    public function create()
+    {
+        //
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -49,14 +45,25 @@ class BoardController extends Controller
     {
         //
 		$this->validate($request, [
-			'title' => 'required|max:50',
-			'text' => 'required|max:255',
-		]);
-		$board = $request->user()->boards()->create([
-			'title' => $request->title,
-			'text' => $request->text
+			'tag' => 'required|max:20',
 		]);
 		
+		if(!Tag::where('name', $request->tag)->exists()){
+			$tag = new Tag;
+			$tag->name = $request->tag;
+			$tag->save();
+		}else{
+			$tag = Tag::where('name', $request->tag)->first();
+		}
+		
+		$board = Board::find($request->board_id);
+		$tagList = $board->getTagListAttribute();
+		
+		if(!array_search($tag->id, $tagList)){
+			$tagList[] = $tag->id;
+		}
+
+		$board->tags()->sync($tagList);
 		
 		return redirect()->action('BoardController@show', [$board->id]);
     }
@@ -70,9 +77,11 @@ class BoardController extends Controller
     public function show($id)
     {
         //
-		$board = Board::findOrFail($id);
-		return view('boardDetailA', [
-			'board' => $board,
+		$tag = Tag::find($id);
+		$boards = $tag->boards()->paginate(3);
+		return view('boardList', [
+			"tag" => $tag,
+			"boards" => $boards
 		]);
     }
 
@@ -85,12 +94,6 @@ class BoardController extends Controller
     public function edit($id)
     {
         //
-		
-		$board = Board::findOrFail($id);
-		
-		return view('boardEdit', [
-			'board' => $board,
-		]);
     }
 
     /**
@@ -103,18 +106,11 @@ class BoardController extends Controller
     public function update(Request $request, $id)
     {
         //
-		$this->validate($request, [
-			'title' => 'required|max:50',
-			'text' => 'required|max:255',
-		]);
-		$board = Board::findOrFail($id);
-		$this->authorize('update', $board);
-		$board->update([
-			'title' => $request->title,
-			'text' => $request->text
-		]);
+		$board = Board::find($request->board_id);
+		$board->tags()->detach($id);
 		
 		return redirect()->action('BoardController@show', [$board->id]);
+		
     }
 
     /**
@@ -126,10 +122,6 @@ class BoardController extends Controller
     public function destroy($id)
     {
         //
-		$board = Board::findOrFail($id);
-		$this->authorize('destroy', $board);
-		$board->delete();
 		
-		return redirect('/');
     }
 }
