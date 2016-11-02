@@ -20,10 +20,14 @@ Route::resource('board', 'BoardController');
 Route::resource('comment', 'CommentController');
 Route::resource('tag', 'TagController');
 
-Route::get('/home', 'HomeController@myHome');
-Route::get('/home/{id}', 'HomeController@userHome');
+
+
 Route::get('/home/comment', 'HomeController@myHomeComment');
 Route::get('/home/comment/{id}', 'HomeController@userHomeComment');
+Route::get('/home/edit', 'HomeController@edit');
+Route::get('/home/update', 'HomeController@update');
+Route::get('/home/{id}', 'HomeController@userHome');
+Route::get('/home', 'HomeController@myHome');
 
 Route::get('/search', 'SearchController@search');
 

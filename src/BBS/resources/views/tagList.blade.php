@@ -6,7 +6,7 @@
         <div class="col-md-10 col-md-offset-1">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
-					タグ検索結果検索結果
+					タグ検索結果
 					@if($tags->total() != 0)
 						<span>{{ $tags->total() }}件中 {{ $tags->firstItem() }} - {{ $tags->lastItem() }}件表示</span>
 					@else

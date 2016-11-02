@@ -5,7 +5,11 @@
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
 			<div class="panel panel-primary">
-				<div class="panel-heading">@yield('search', '掲示板一覧 '.$boards->total().'件中'.$boards->firstItem().'-'.$boards->lastItem().'件表示')</div>
+				<div class="panel-heading">
+					@if(isset($tag))
+						{{ $tag->name }}　タグのついている
+					@endif
+					@yield('search', '掲示板一覧 '.$boards->total().'件中'.$boards->firstItem().'-'.$boards->lastItem().'件表示')</div>
 				<ul class="list-group">
 					@foreach($boards as $board)
 						<li  class="list-group-item">

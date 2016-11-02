@@ -35,7 +35,7 @@
 				
 				<div id="list1" class="panel-collapse collapse">
 				<div class="panel-body">
-					<form class="form-group" role="form" method="POST" action="{{ url('/tag') }}">
+					<form class="form-group" role="form" method="GET" action="{{ url('/tag') }}">
 						{{ csrf_field() }}
 						<input type="hidden" name="board_id" value="{{ $board->id }}">
 						<div class="form-group @if(!empty($errors->first('tag'))) has-error @endif">
@@ -49,19 +49,14 @@
 					</form>
 					@if(Auth::user()->id == $board->user_id)
 						<div class="text-right">
-							<form class="form-group pull-right" role="form" method="POST" action="{{ url('/board/'.$board->id) }}">
-								{{ csrf_field() }}
-								<input name="_method" type="hidden" value="DELETE">
-								<button type="submit" class="btn btn-danger">
-									<i class="fa fa-btn fa-trash"></i>Delete
-								</button>
-							</form>
-							
 							<a href="{{ url('/board/'.$board->id).'/edit' }}">
 								<button type="submit" class="btn btn-info">
 									<i class="fa fa-btn fa-pencil"></i>Edit
 								</button>
 							</a>
+							<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete">
+								<i class="fa fa-btn fa-trash"></i>Delete
+							</button>
 						</div>
 					@endif
 				</div>
@@ -96,6 +91,30 @@
 					</form>
                 </div>
             </div>
+
+<div class="modal fade" id="delete" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"><span>×</span></button>
+				<h4 class="modal-title">確認</h4>
+			</div>
+			<div class="modal-body">
+				本当に削除しますか？
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				<form class="form-group pull-right" role="form" method="POST" action="{{ url('/board/'.$board->id) }}">
+					{{ csrf_field() }}
+					<input name="_method" type="hidden" value="DELETE">
+					<button type="submit" class="btn btn-danger">
+						<i class="fa fa-btn fa-trash"></i>Delete
+					</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
         </div>
     </div>
 </div>

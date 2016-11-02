@@ -20,9 +20,32 @@ class TagController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         //
+		$this->validate($request, [
+			'tag' => 'required|max:20',
+		]);
+		
+		$board = Board::find($request->board_id);
+		$tagList = $board->getTagListAttribute();
+		
+		foreach((array)$request->tag as $tagItem){
+			if(!Tag::where('name', $tagItem)->exists()){
+				$tag = new Tag;
+				$tag->name = $tagItem;
+				$tag->save();
+			}else{
+				$tag = Tag::where('name', $tagItem)->first();
+			}
+			if(!array_search($tag->id, $tagList)){
+				$tagList[] = $tag->id;
+			}
+		}
+		
+		$board->tags()->sync($tagList);
+		
+		return redirect()->action('BoardController@show', [$board->id]);
     }
 
     /**
@@ -44,28 +67,6 @@ class TagController extends Controller
     public function store(Request $request)
     {
         //
-		$this->validate($request, [
-			'tag' => 'required|max:20',
-		]);
-		
-		if(!Tag::where('name', $request->tag)->exists()){
-			$tag = new Tag;
-			$tag->name = $request->tag;
-			$tag->save();
-		}else{
-			$tag = Tag::where('name', $request->tag)->first();
-		}
-		
-		$board = Board::find($request->board_id);
-		$tagList = $board->getTagListAttribute();
-		
-		if(!array_search($tag->id, $tagList)){
-			$tagList[] = $tag->id;
-		}
-
-		$board->tags()->sync($tagList);
-		
-		return redirect()->action('BoardController@show', [$board->id]);
     }
 
     /**

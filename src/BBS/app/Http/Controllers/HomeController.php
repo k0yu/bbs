@@ -27,7 +27,7 @@ class HomeController extends Controller
     {
 		$user = \Auth::user();
 		$boards = $user->boards()->paginate(3);
-        return view('home', [
+        return view('homeBoard', [
 			"user" => $user,
 			"boards" => $boards
 		]);
@@ -37,7 +37,7 @@ class HomeController extends Controller
     {
 		$user = User::find($id);
 		$boards = $user->boards()->paginate(3);
-        return view('home', [
+        return view('homeBoard', [
 			"user" => $user,
 			"boards" => $boards
 		]);
@@ -60,6 +60,21 @@ class HomeController extends Controller
 			"user" => $user,
 			"comments" => $comments
 		]);
-
 	}
+	
+	public function edit(){
+		$user = \Auth::user();
+		return view('nameUpdate', ["user" => $user,]);
+	}
+	
+	public function update(Request $request){
+        $this->validate($request, [
+			'name' => 'required|max:255',
+		]);
+		
+		$user = \Auth::user();
+		$user->update(['name' => $request->name]);
+		
+		return redirect()->action('HomeController@myHome');
+    }
 }

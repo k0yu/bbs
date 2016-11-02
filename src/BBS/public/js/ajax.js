@@ -2,6 +2,7 @@
 
 onload = init;
 
+
 function init(){
 
 	$.ajaxSetup({
@@ -10,6 +11,14 @@ function init(){
         }
 	});
 	$('#commentList').ready(commentGet());
+	
+	$('#delete').on('show.bs.modal', function (event) {
+		var button = $(event.relatedTarget);
+		var recipient = button.data('recipient');
+		var modal = $(this);
+		modal.find('form').attr('action', recipient);
+	});
+	$('#tagAdd').on('click', tagAdd);
 	$('#tagTgl').on('click', tagDeleteBtn);
 	
 }
@@ -51,10 +60,49 @@ function commentGet(){
 			console.log(jqXHR + '-' + textStatus + '-' + errorThrown);
 		}
 	});
+	
+}
+
+function tagAdd(){
+	var tag = $('#tag').val();
+	if(tag.length <= 0){
+		$('#tagList').addClass("has-error");
+		$('#tagList .help-block').text("1文字以上入力してください。");
+	}else if(tag.length > 20){
+		$('#tagList').addClass("has-error");
+		$('#tagList .help-block').text("20文字以下にしてください。");
+	}else{
+		var flag = true;
+		$('input[name="tag[]"]').each(function(i, elem){
+			if($(elem).val() == tag){
+				flag = false;
+				return false;
+			}
+		});
+		if(flag){
+			$('#tagList').append('<a type="button" class="btn btn-primary btn-xs tagDelete">'+
+					tag+
+					'<span class="glyphicon glyphicon-remove-circle"></span></a>'+ 
+					'<input name="tag[]" type="hidden" value="'+
+					$('#tag').val()+
+					'">'
+				);
+			$('.tagDelete').on('click', tagDelete);
+		}
+		$('#tag').val('');
+		$('#tagList').removeClass("has-error");
+		$('#tagList .help-block').text("");
+	}
+}
+function tagDelete(){
+	if($('.tagDelete').index(this) >= 0){
+		var num = $('.tagDelete').index(this);
+		$(this).remove();
+		$('input[name="tag[]"]').eq(num).remove();
+	}
 }
 
 function tagDeleteBtn(){
-	
 	if($('.tagDeleteBtn').hasClass("hidden")){
 		$('.tagDeleteBtn').removeClass("hidden");
 		$('.tag').attr('method', 'POST');
@@ -64,7 +112,8 @@ function tagDeleteBtn(){
 			csrf+
 			'"><input type="hidden" name="board_id" value="'+
 			board_id+
-			'">');
+			'">'
+		);
 	}else{
 		$('.tagDeleteBtn').addClass("hidden");
 		$('.tag').attr('method', 'GET');
