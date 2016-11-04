@@ -47,9 +47,9 @@ class SearchController extends Controller
 			return view('userList', ['users' => $users]);
 		}elseif($target == "tag"){
 			if ($keyword) {
-				$tags = Tag::where('name', 'LIKE', "%{$keyword}%")->orderBy('updated_at', 'desc')->paginate($pageNum);
+				$tags = Tag::where('name', 'LIKE', "%{$keyword}%")->withCount('boards')->orderBy('boards_count', 'desc')->paginate($pageNum);
 			}else{
-				$tags = Tag::orderBy('updated_at', 'desc')->paginate($pageNum);
+				$tags = Tag::withCount('boards')->orderBy('boards_count', 'desc')->paginate($pageNum);
 			}
 			return view('tagList', ['tags' => $tags]);
 		}

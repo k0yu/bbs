@@ -2,7 +2,7 @@
 							@foreach($json as $comment)
 								<li class="list-group-item">
 									<a href="{{ url('/home/'.App\User::find($comment->user_id)->id) }}">{{ App\User::find($comment->user_id)->name }}</a>
-									<span>createTime:{{ $comment->created_at }}</span>
+									<span class="pull-right">投稿時間:{{ $comment->created_at }} 更新時間:{{ $comment->updated_at }}</span>
 									<p>{!! str_replace('&lt;br /&gt;', '<br>', e( nl2br($comment->text) ,ENT_QUOTES) ) !!}</p>
 									@if(Auth::user()->id == $comment->user_id)
 										<div class="text-right">

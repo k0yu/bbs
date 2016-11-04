@@ -10,7 +10,9 @@
 					<ul class="list-group">
 						@foreach($comments as $comment)
 						<li class="list-group-item">
+							<p class="pull-right">更新時間:{{ $comment->updated_at }}</p>
 							<a href="{{ url('/board/'.$comment->board_id) }}"><p>{{ App\Board::find($comment->board_id)->title }}</p></a>
+							
 							<p>{{ $comment->text }}</p>
 						</li>
 						@endforeach

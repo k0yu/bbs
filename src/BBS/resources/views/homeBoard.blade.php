@@ -11,7 +11,7 @@
 					<ul class="list-group">
 						@foreach($boards as $board)
 							<a href="{{ url('/board/'.$board->id) }}" class="list-group-item">
-								<p>{{ $board->title }}</p>
+								<p>{{ $board->title }}<span class="pull-right">更新時間:{{ $board->updated_at }}</span></p>
 								<p class="boardText">{{ $board->text }}</p>
 							</a>
 						@endforeach

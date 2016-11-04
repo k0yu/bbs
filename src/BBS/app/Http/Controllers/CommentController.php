@@ -69,7 +69,9 @@ class CommentController extends Controller
 		//jsonA = json_decode($json); nullになる
 		$array = array(
 			'view' => view('commentDetail')->with('json', $json)->render(),
-			'next_page_url' => $json->nextPageUrl()
+			'next_page_url' => $json->nextPageUrl(),
+			'total' => $json->total(),
+			'lastItem' => $json->lastItem()
 		);
 		
 		return json_encode($array);

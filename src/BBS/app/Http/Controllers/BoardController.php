@@ -117,7 +117,10 @@ class BoardController extends Controller
 			'text' => $request->text
 		]);
 		
-		return redirect()->action('BoardController@show', [$board->id]);
+		return redirect()->action('TagController@index', [
+			'tag' => $request->tag,
+			'board_id' => $board->id
+		]);
     }
 
     /**

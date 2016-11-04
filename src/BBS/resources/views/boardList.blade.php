@@ -19,7 +19,7 @@
 							<a href="{{ url('/home/'.App\User::find($board->user_id)->id) }}">
 								{{ App\User::find($board->user_id)->name }}
 							</a>
-							<span>updatetime:{{ $board->updated_at }}</span>
+							<span class="pull-right">更新時間:{{ $board->updated_at }}</span>
 						</li>
 					@endforeach
 				</ul>

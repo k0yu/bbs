@@ -23,13 +23,9 @@ class TagController extends Controller
     public function index(Request $request)
     {
         //
-		$this->validate($request, [
-			'tag' => 'required|max:20',
-		]);
 		
 		$board = Board::find($request->board_id);
-		$tagList = $board->getTagListAttribute();
-		
+		$tagList = [];
 		foreach((array)$request->tag as $tagItem){
 			if(!Tag::where('name', $tagItem)->exists()){
 				$tag = new Tag;
@@ -67,6 +63,27 @@ class TagController extends Controller
     public function store(Request $request)
     {
         //
+		$this->validate($request, [
+			'tag' => 'required|max:20',
+		]);
+		
+		$board = Board::find($request->board_id);
+		$tagList = $board->getTagListAttribute();
+		
+		if(!Tag::where('name', $request->tag)->exists()){
+			$tag = new Tag;
+			$tag->name = $request->tag;
+			$tag->save();
+		}else{
+			$tag = Tag::where('name', $request->tag)->first();
+		}
+		if(!array_search($tag->id, $tagList)){
+			$tagList[] = $tag->id;
+		}
+		
+		$board->tags()->sync($tagList);
+		
+		return redirect()->action('BoardController@show', [$board->id]);
     }
 
     /**
@@ -79,7 +96,7 @@ class TagController extends Controller
     {
         //
 		$tag = Tag::find($id);
-		$boards = $tag->boards()->paginate(3);
+		$boards = $tag->boards()->orderBy('updated_at', 'desc')->paginate(3);
 		return view('boardList', [
 			"tag" => $tag,
 			"boards" => $boards

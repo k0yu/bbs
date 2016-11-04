@@ -14,7 +14,7 @@
 
                 <div class="panel-body">
 					<div class="text-right">
-						<p>createTime:{{ $board->created_at }}  updateTime:{{ $board->updated_at }}</p>
+						<p>投稿時間:{{ $board->created_at }}  更新時間:{{ $board->updated_at }}</p>
 						<a href="{{ url('/home/'.App\User::find($board->user_id)->id) }}">{{ App\User::find($board->user_id)->name }}</a>
 						
 					</div>
@@ -35,7 +35,7 @@
 				
 				<div id="list1" class="panel-collapse collapse">
 				<div class="panel-body">
-					<form class="form-group" role="form" method="GET" action="{{ url('/tag') }}">
+					<form class="form-group" role="form" method="POST" action="{{ url('/tag') }}">
 						{{ csrf_field() }}
 						<input type="hidden" name="board_id" value="{{ $board->id }}">
 						<div class="form-group @if(!empty($errors->first('tag'))) has-error @endif">
@@ -65,7 +65,7 @@
 			
 			
 			<div class="panel panel-info">
-                <div class="panel-heading">Comment List</div>
+                <div class="panel-heading">Comment List <span id="commentNum"></span></div>
 
 
 					@if($board->comments()->exists())

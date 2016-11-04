@@ -12,7 +12,9 @@ class Board extends Model
 		'title', 'text'
 	];
 	
-	public function userB(){
+	protected $touches = ['user'];
+	
+	public function user(){
 		return $this->belongsTo('App\User');
 	}
 	

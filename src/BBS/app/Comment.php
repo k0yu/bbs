@@ -13,9 +13,9 @@ class Comment extends Model
         'text', 'board_id'
     ];
 	
-	protected $touches = ['board'];
+	protected $touches = ['user', 'board'];
 	
-	public function userC(){
+	public function user(){
 		return $this->belongsTo('App\User');
 	}
 	

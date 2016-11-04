@@ -11,7 +11,7 @@ function init(){
         }
 	});
 	$('#commentList').ready(commentGet());
-	
+	$('.tagDelete').on('click', tagDelete);
 	$('#delete').on('show.bs.modal', function (event) {
 		var button = $(event.relatedTarget);
 		var recipient = button.data('recipient');
@@ -42,6 +42,9 @@ function commentGet(){
 				
 				);
 			};*/
+			if(json.lastItem != null){
+				$('#commentNum').text(json.total + '件中' + json.lastItem + '件表示');
+			}
 			if(json.next_page_url != null){
 				$('link[rel="next"]').attr('href', json.next_page_url);
 				if(!$('#commentAjax').size()){
